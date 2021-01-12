@@ -33,9 +33,8 @@ namespace ClosedXMLTest
             main obj = new main();
 
             //XLファイルのパスを入力
-            Console.Write("Enter the Pass : F:\\wau\\Documents\\todoList.xlsx");
-            string pass = @"F:\wau\Documents\todoList.xlsx";
-            Console.ReadLine();
+            Console.Write("Enter the Pass : ");
+            string pass = Console.ReadLine();
 
             //ワークブック・シートを開く
             var workbook = new XLWorkbook(pass);
