@@ -82,23 +82,46 @@ namespace ClosedXMLTest
             ComparedItems.Sort((a, b) => (a.Number - b.Number));
 
             //新規ブック・シート作成
-            var newBook = new XLWorkbook();
-            var newSheet = newBook.Worksheets.Add("New List");
+            bool nameMatching = false;
+            string matchedName = "";
+            IXLWorksheet newSheet;
+            foreach (IXLWorksheet worksheet in workbook.Worksheets)
+            {
+                if (worksheet.Name == "NewList")
+                {
+                    nameMatching = true;
+                    matchedName = worksheet.Name;
+                }
+            }
+
+            if(nameMatching == false)
+            {
+                sheet.CopyTo("NewList");
+                newSheet = workbook.Worksheet("NewList");
+            }
+            else
+            {
+                sheet.CopyTo(matchedName + "1");
+                newSheet = workbook.Worksheet("matchedName" + "1");
+            }
+
+            
             newSheet.Cell(1, 1).Value = "No";
-            newSheet.Cell(1, 2).Value = "Name";
-            newSheet.Cell(1, 3).Value = "Necessity";
-            newSheet.Cell(1, 4).Value = "Interest";
+            newSheet.Cell(1, 3).Value = "Name";
+            newSheet.Cell(1, 4).Value = "Necessity";
+            newSheet.Cell(1, 5).Value = "Interest";
 
             for(int i = 0; i < ComparedItems.Count; i++)
             {
                 newSheet.Cell(i + 2, 1).Value = ComparedItems[i].Number;
-                newSheet.Cell(i + 2, 2).Value = ComparedItems[i].Name;
-                newSheet.Cell(i + 2, 3).Value = ComparedItems[i].Value1;
-                newSheet.Cell(i + 2, 4).Value = ComparedItems[i].Value2;
+                newSheet.Cell(i + 2, 3).Value = ComparedItems[i].Name;
+                newSheet.Cell(i + 2, 4).Value = ComparedItems[i].Value1;
+                newSheet.Cell(i + 2, 5).Value = ComparedItems[i].Value2;
             }
+            newSheet.Column(2).Delete();
 
             //newBook.SaveAs(@"F:\wau\Documents\NewBook.xlsx");
-            newBook.SaveAs("NewBook.xlsx");
+            workbook.Save();
 
 
         }
